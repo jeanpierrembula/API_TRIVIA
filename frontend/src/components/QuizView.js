@@ -19,12 +19,20 @@ class QuizView extends Component {
     };
   }
 
+  get_category(cats) {
+    const tab = []
+    for (let element of cats)
+      {
+        tab.push(element.type)
+      }
+      return tab
+  } 
   componentDidMount() {
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `/categories`, //TERMINÉ: update request URL
       type: 'GET',
       success: (result) => {
-        this.setState({ categories: result.categories });
+        this.setState({ categories: this.get_category(result.categories)});
         return;
       },
       error: (error) => {
@@ -49,12 +57,12 @@ class QuizView extends Component {
     }
 
     $.ajax({
-      url: '/quizzes', //TODO: update request URL
+      url: '/quizzes', //TERMINÉ: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
-        previous_questions: previousQuestions,
+        last_questions: previousQuestions,
         quiz_category: this.state.quizCategory,
       }),
       xhrFields: {
@@ -114,7 +122,7 @@ class QuizView extends Component {
                 value={id}
                 className='play-category'
                 onClick={() =>
-                  this.selectCategory({ type: this.state.categories[id], id })
+                  this.selectCategory({ type: this.state.categories[id], id: parseInt(id)+1 })
                 }
               >
                 {this.state.categories[id]}

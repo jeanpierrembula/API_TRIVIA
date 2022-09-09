@@ -22,7 +22,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `/questions?page=${this.state.page}`, //TERMINÉ: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -65,13 +65,13 @@ class QuestionView extends Component {
 
   getByCategory = (id) => {
     $.ajax({
-      url: `/categories/${id}/questions`, //TODO: update request URL
+      url: `/categories/${id}/questions`, //TERMINÉ: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
           questions: result.questions,
-          totalQuestions: result.total_questions,
-          currentCategory: result.current_category,
+          totalQuestions: result.total_de_questions,
+          currentCategory: result.categorie_courante,
         });
         return;
       },
@@ -82,37 +82,36 @@ class QuestionView extends Component {
     });
   };
 
-  submitSearch = (searchTerm) => {
+  submitSearch = (Terme_de_recherche) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
-      type: 'POST',
+      url: `/questions/recherches`, //TERMINÉ: update request URL
+      type: "POST",
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify({ searchTerm: searchTerm }),
+      data: JSON.stringify({Terme_de_recherche: Terme_de_recherche}),
       xhrFields: {
-        withCredentials: true,
+        withCredentials: true
       },
       crossDomain: true,
       success: (result) => {
         this.setState({
           questions: result.questions,
-          totalQuestions: result.total_questions,
-          currentCategory: result.current_category,
-        });
+          totalQuestions: result.totale_de_questions,
+          currentCategory: result.Ccategory })
         return;
       },
       error: (error) => {
-        alert('Unable to load questions. Please try your request again');
+        alert('Unable to load questions. Please try your request again')
         return;
-      },
-    });
-  };
+      }
+    })
+  }
 
   questionAction = (id) => (action) => {
     if (action === 'DELETE') {
       if (window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
+          url: `/questions/${id}`, //TERMINÉ: update request URL
           type: 'DELETE',
           success: (result) => {
             this.getQuestions();
